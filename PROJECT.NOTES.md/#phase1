@@ -1,0 +1,215 @@
+# EngineerOS AI – Phase 1 Notes
+
+## Overview
+
+In Phase 1, I built the backend foundation of EngineerOS AI using Java, Spring Boot, Spring Data JPA, PostgreSQL, and Maven. The backend exposes REST APIs that allow clients (such as a React frontend) to perform CRUD operations on DSA problems stored in a PostgreSQL database.
+
+---
+
+## Tech Stack
+
+* Java 21
+* Spring Boot 3
+* Spring Web
+* Spring Data JPA
+* Hibernate
+* PostgreSQL
+* Maven
+
+---
+
+## Layered Architecture
+
+The application follows Layered Architecture:
+
+**Client → Controller → Service → Repository → Database**
+
+### Controller
+
+* Handles incoming HTTP requests.
+* Calls the Service layer.
+* Returns HTTP responses.
+
+### Service
+
+* Contains business logic.
+* Coordinates application operations.
+* Acts as a bridge between Controller and Repository.
+
+### Repository
+
+* Handles database operations.
+* Extends `JpaRepository`.
+* Uses Hibernate/JPA to generate SQL automatically.
+
+### Entity
+
+* Represents a database table.
+* Each object represents one row in the table.
+
+---
+
+## ORM (Object Relational Mapping)
+
+Hibernate maps Java objects to database tables.
+
+Instead of writing SQL manually, I work with Java objects and Hibernate generates SQL queries behind the scenes.
+
+---
+
+## Problem Entity
+
+Represents the `problem` table.
+
+Fields:
+
+* id
+* title
+* difficulty
+* topic
+* url
+
+Important annotations:
+
+* `@Entity` – Marks the class as a database entity.
+* `@Id` – Declares the primary key.
+* `@GeneratedValue` – Enables automatic ID generation.
+
+---
+
+## Repository
+
+`ProblemRepository` extends `JpaRepository<Problem, Long>`.
+
+Common methods inherited:
+
+* `findAll()`
+* `findById()`
+* `save()`
+* `deleteById()`
+* `existsById()`
+* `count()`
+
+No SQL implementation is required because Spring Data JPA provides these methods.
+
+---
+
+## Service Layer
+
+The Service layer contains business logic.
+
+Current responsibilities:
+
+* Retrieve all problems.
+* Retrieve a problem by ID.
+* Create a problem.
+* Update a problem.
+* Delete a problem.
+
+Keeping business logic here ensures Controllers remain simple and focused on handling HTTP requests.
+
+---
+
+## Controller Layer
+
+The Controller exposes REST APIs.
+
+Endpoints:
+
+* `GET /api/problems`
+* `GET /api/problems/{id}`
+* `POST /api/problems`
+* `PUT /api/problems/{id}`
+* `DELETE /api/problems/{id}`
+
+The Controller delegates all work to the Service layer.
+
+---
+
+## CRUD Operations
+
+CRUD stands for:
+
+* Create
+* Read
+* Update
+* Delete
+
+These operations form the foundation of most backend systems.
+
+---
+
+## Data Seeding
+
+A `DataSeeder` reads `resources/problems_seed.json` during application startup and inserts initial DSA problems into PostgreSQL.
+
+Benefits:
+
+* Automatic sample data
+* Consistent development environment
+* Easy onboarding for new developers
+
+---
+
+## application.properties
+
+Stores application configuration such as:
+
+* Database URL
+* Username
+* Password
+* Server port
+* Hibernate settings
+
+Keeping configuration separate from code makes applications easier to deploy across different environments.
+
+---
+
+## Request Lifecycle
+
+Example: `GET /api/problems/1`
+
+1. Client sends an HTTP request.
+2. `ProblemController` receives the request.
+3. `ProblemService` processes the request.
+4. `ProblemRepository` retrieves data.
+5. Hibernate executes SQL.
+6. PostgreSQL returns the result.
+7. Hibernate converts the database row into a Java object.
+8. The Service returns the object.
+9. The Controller serializes it into JSON.
+10. The client receives the response.
+
+---
+
+## Key Concepts Learned
+
+* Spring Boot project structure
+* Maven dependency management
+* REST APIs
+* Layered Architecture
+* JPA
+* Hibernate
+* ORM
+* PostgreSQL integration
+* CRUD operations
+* JSON serialization
+* Data seeding
+* Configuration management
+
+---
+
+## Industry Best Practices Introduced
+
+* Separation of concerns
+* Layered architecture
+* Repository pattern
+* Service layer pattern
+* Externalized configuration
+* Reusable data access with Spring Data JPA
+
+---
+
+## Next Phase
+
+Phase 2 will connect the React frontend to the Spring Boot backend, introduce CORS configuration, and consume the REST APIs to display DSA problems in the UI.
