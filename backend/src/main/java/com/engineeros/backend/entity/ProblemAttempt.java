@@ -22,6 +22,10 @@ public class ProblemAttempt {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
+     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String status;
 
     private String notes;
@@ -42,6 +46,13 @@ public class ProblemAttempt {
     public void setProblem(Problem problem) {
         this.problem = problem;
     }
+    public User getUser() {
+    return user;
+}
+
+public void setUser(User user) {
+    this.user = user;
+}
 
     public String getStatus() {
         return status;
